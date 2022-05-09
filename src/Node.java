@@ -11,11 +11,4 @@ public class Node {
         this.next_L = null;
         this.next_H = null;
     }
-
-    public void insert_H(Node n){
-        this.next_H = n;
-    }
-    public void insert_L(Node n){
-        this.next_L = n;
-    }
 }

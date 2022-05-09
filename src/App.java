@@ -12,5 +12,10 @@ public class App {
         tree.insert(14);
         tree.insert(15);
         tree.print_preorder();
-    }
+        tree.print_inorder();
+        tree.print_postorder();
+        System.out.println("Height: " + tree.height());
+        System.out.println("15 exists on this tree: " + tree.search(15));
+        System.out.println("3 exists on this tree: " + tree.search(3));
+    } 
 }
