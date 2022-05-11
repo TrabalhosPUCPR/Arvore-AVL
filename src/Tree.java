@@ -6,13 +6,13 @@ public class Tree {
         this.root = null;
     }
 
-    public void insert(int value){
+    public void insert(String value){
         if(this.root == null){
             this.root = new Node(value, null);
         }else{
             Node p = this.root;
             while(p != null){
-                if(p.value > value){
+                if(p.value.compareTo(value) < 0){
                     if(p.next_L == null){p.next_L = new Node(value, p); break;}
                     p = p.next_L;
                 }else{
@@ -24,12 +24,43 @@ public class Tree {
         nodes++;
     }
 
-    public boolean search(int value){
+    public void remove(String value){
+        Node p = this.root;
+        while(p != null){
+            if(p.value == value){
+                if(p.next_H == null){
+                    Node p2 = p.next_L;
+                    while(p2.next_H != null){
+                        p2 = p2.next_H;
+                    }
+                    p.value = p2.value;
+                    p.lista = p2.lista;
+                    if(p.next_L == p2){p.next_L = null;}else{p2.root.next_H = p2.next_L;}
+                }else{
+                    Node p2 = p.next_H;
+                    while(p2.next_L != null){
+                        p2 = p2.next_L;
+                    }
+                    p.value = p2.value;
+                    p.lista = p2.lista;
+                    if(p.next_H == p2){p.next_H = null;}else{p2.root.next_L = p2.next_H;}
+                }
+                return;
+            }else if(p.value.compareTo(value) < 0){
+                p = p.next_L;
+            }else{
+                p = p.next_H;
+            }
+        }
+        System.out.println("String nao encontrado");
+    }
+
+    public boolean search(String value){
         Node p = this.root;
         while(p != null){
             if(p.value == value){
                 return true;
-            }else if(p.value > value){
+            }else if(p.value.compareTo(value) < 0){
                 p = p.next_L;
             }else{
                 p = p.next_H;
