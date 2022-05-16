@@ -1,17 +1,20 @@
 package Lista;
 
-public class No <T>{
-    T value;
-    No<?> proximo;
-    No<?> anterior;
+public class No{
+    int freq;
+    String title;
+    No proximo;
+    No anterior;
 
-    public No(T value){
-        this.value = value;
+    public No(int freq, String title){
+        this.freq = freq;
+        this.title = title;
         this.proximo = null;
         this.anterior = null;
     }
 
-    public T getValue(){
-        return this.value;
-    }
+    public int getFreq(){return this.freq;}
+    public void incrementFreq(){this.freq++;}
+    public String getTitle(){return this.title;}
+    public No getProx(){return this.proximo;}
 }

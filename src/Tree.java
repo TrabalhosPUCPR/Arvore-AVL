@@ -1,3 +1,5 @@
+import Lista.No;
+
 public class Tree {
     private Node root;
 
@@ -5,14 +7,14 @@ public class Tree {
         this.root = null;
     }
 /*p.value.compareTo(value) < 0*/
-    public void insert(int value){
+    public void insert(String value){
         if(this.root == null){
             this.root = new Node(value);
         }else{
             Node p = this.root;
             Node inserted = new Node(value);
             while(p != null){
-                if(p.value > value){
+                if(p.value.compareTo(value) < 0){
                     if(p.next_L == null){
                         inserted.root = p;
                         p.next_L = inserted; 
@@ -33,27 +35,72 @@ public class Tree {
         }
     }
 
-    public void remove(int value){
+    public void insert(String value, String fileTitle){
+        if(this.root == null){
+            this.root = new Node(value, fileTitle);
+        }else{
+            Node p = this.root;
+            Node inserted = new Node(value, fileTitle);
+            while(p != null){
+                if(p.value.compareTo(value) < 0){
+                    if(p.next_L == null){
+                        inserted.root = p;
+                        p.next_L = inserted; 
+                        break;
+                    }
+                    p = p.next_L;
+                }else if(p.value.compareTo(value) > 0){
+                    if(p.next_H == null){
+                        inserted.root = p;
+                        p.next_H = inserted; 
+                        break;
+                    }
+                    p = p.next_H;
+                }else{
+                    No n = p.getLista().getPrimeiro();
+                    boolean contain = false;
+                    while(n != null){
+                        if(n.getTitle().equals(fileTitle)){
+                            n.incrementFreq();
+                            contain = true;
+                            break;
+                        }
+                        n = n.getProx();
+                    }
+                    if(!contain){
+                        p.getLista().add(1, fileTitle);
+                    }
+                    break;
+                }
+            }
+            p.updateHeight();
+            this.root = Node.rotate(p);
+        }
+    }
+
+    public void remove(String value){
         Node p = this.root;
         while(p != null){
             if(p.value == value){
                 if(p.next_H == null){
+                    p.equalize(p.next_L);
+                    p.next_L = null;
+                }else if(p.next_L == null){
+                    p.equalize(p.next_H);
+                    p.next_H = null;
+                }else{
                     Node p2 = p.next_L;
                     while(p2.next_H != null){
                         p2 = p2.next_H;
                     }
                     p.equalize(p2);
-                    if(p.next_L == p2){p.next_L = null;}else{p2.root.next_H = p2.next_L;}
-                }else{
-                    Node p2 = p.next_H;
-                    while(p2.next_L != null){
-                        p2 = p2.next_L;
-                    }
-                    p.equalize(p2);
-                    if(p.next_H == p2){p.next_H = null;}else{p2.root.next_L = p2.next_H;}
+                    p2.root.next_L = null;
+                    System.out.println("aaaa");
                 }
+                p.updateHeight();
+                this.root = Node.rotate(p);
                 return;
-            }else if(/*p.value.compareTo(value) < 0*/p.value > value){
+            }else if(p.value.compareTo(value) < 0/*p.value > value*/){
                 p = p.next_L;
             }else{
                 p = p.next_H;
@@ -62,12 +109,26 @@ public class Tree {
         System.out.println("String nao encontrado");
     }
 
-    public boolean search(int value){
+    public String getFreq(String value){
+        Node p = this.root;
+        while(p != null){
+            if(p.value == value){
+                return p.lista.toString();
+            }else if(p.value.compareTo(value) < 0/*p.value > value*/){
+                p = p.next_L;
+            }else{
+                p = p.next_H;
+            }
+        }
+        return "";
+    }
+
+    public boolean exists(String value){
         Node p = this.root;
         while(p != null){
             if(p.value == value){
                 return true;
-            }else if(/*p.value.compareTo(value) < 0*/p.value > value){
+            }else if(p.value.compareTo(value) < 0/*p.value > value*/){
                 p = p.next_L;
             }else{
                 p = p.next_H;
@@ -77,6 +138,7 @@ public class Tree {
     }
 
     public int getMaxHeight(){
+        if(this.root == null){return 0;}
         return this.root.height;
     }
 

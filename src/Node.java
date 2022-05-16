@@ -7,14 +7,25 @@ public class Node {
 
     int height;
 
-    //String value;
-    int value;
+    String value;
+    //int value;
     Lista lista;
 
-    public Node(int value){
+    public Node(String value){
         this.value = value;
         this.height = 1;
         this.lista = new Lista();
+    }
+    public Node(String value, Lista lista){
+        this.value = value;
+        this.height = 1;
+        this.lista = lista;
+    }
+    public Node(String value, String fileTitle){
+        this.value = value;
+        this.height = 1;
+        this.lista = new Lista();
+        this.lista.add(1, fileTitle);
     }
 
     void updateHeight(){
