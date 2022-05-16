@@ -1,30 +1,39 @@
 public class Tree {
     private Node root;
-    private int nodes = 0;
 
     public Tree(){
         this.root = null;
     }
-
-    public void insert(String value){
+/*p.value.compareTo(value) < 0*/
+    public void insert(int value){
         if(this.root == null){
-            this.root = new Node(value, null);
+            this.root = new Node(value);
         }else{
             Node p = this.root;
+            Node inserted = new Node(value);
             while(p != null){
-                if(p.value.compareTo(value) < 0){
-                    if(p.next_L == null){p.next_L = new Node(value, p); break;}
+                if(p.value > value){
+                    if(p.next_L == null){
+                        inserted.root = p;
+                        p.next_L = inserted; 
+                        break;
+                    }
                     p = p.next_L;
                 }else{
-                    if(p.next_H == null){p.next_H = new Node(value, p); break;}
+                    if(p.next_H == null){
+                        inserted.root = p;
+                        p.next_H = inserted; 
+                        break;
+                    }
                     p = p.next_H;
                 }
             }
+            p.updateHeight();
+            this.root = Node.rotate(p);
         }
-        nodes++;
     }
 
-    public void remove(String value){
+    public void remove(int value){
         Node p = this.root;
         while(p != null){
             if(p.value == value){
@@ -33,20 +42,18 @@ public class Tree {
                     while(p2.next_H != null){
                         p2 = p2.next_H;
                     }
-                    p.value = p2.value;
-                    p.lista = p2.lista;
+                    p.equalize(p2);
                     if(p.next_L == p2){p.next_L = null;}else{p2.root.next_H = p2.next_L;}
                 }else{
                     Node p2 = p.next_H;
                     while(p2.next_L != null){
                         p2 = p2.next_L;
                     }
-                    p.value = p2.value;
-                    p.lista = p2.lista;
+                    p.equalize(p2);
                     if(p.next_H == p2){p.next_H = null;}else{p2.root.next_L = p2.next_H;}
                 }
                 return;
-            }else if(p.value.compareTo(value) < 0){
+            }else if(/*p.value.compareTo(value) < 0*/p.value > value){
                 p = p.next_L;
             }else{
                 p = p.next_H;
@@ -55,12 +62,12 @@ public class Tree {
         System.out.println("String nao encontrado");
     }
 
-    public boolean search(String value){
+    public boolean search(int value){
         Node p = this.root;
         while(p != null){
             if(p.value == value){
                 return true;
-            }else if(p.value.compareTo(value) < 0){
+            }else if(/*p.value.compareTo(value) < 0*/p.value > value){
                 p = p.next_L;
             }else{
                 p = p.next_H;
@@ -69,8 +76,8 @@ public class Tree {
         return false;
     }
 
-    public int height(){
-        return (int)Math.pow(this.nodes, 0.5);
+    public int getMaxHeight(){
+        return this.root.height;
     }
 
     public void print_preorder(){System.out.print("Tree in pre-order: "); print_preorder(this.root); System.out.println("");}
