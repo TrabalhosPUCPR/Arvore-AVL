@@ -2,8 +2,8 @@ import Lista.Lista;
 
 public class Node {
     Node root;
-    Node next_H;
-    Node next_L;
+    Node leftBranch;
+    Node rightBranch;
 
     int height;
 
@@ -29,84 +29,84 @@ public class Node {
     }
 
     void updateHeight(){
-        if(this.next_H != null && this.next_L == null){
-            this.height = this.next_H.height + 1;
-        }else if(this.next_H == null && this.next_L != null){
-            this.height = this.next_L.height + 1;
-        }else if(this.next_H != null && this.next_L != null){
-            if(this.next_H != null && this.next_H.height > this.next_L.height){
-                this.height = this.next_H.height + 1;
-            }else if(this.next_L != null && this.next_H.height < this.next_L.height){
-                this.height = this.next_H.height + 1;
+        if(this.rightBranch != null && this.leftBranch == null){
+            this.height = this.rightBranch.height + 1;
+        }else if(this.rightBranch == null && this.leftBranch != null){
+            this.height = this.leftBranch.height + 1;
+        }else if(this.rightBranch != null && this.leftBranch != null){
+            if(this.rightBranch != null && this.rightBranch.height > this.leftBranch.height){
+                this.height = this.rightBranch.height + 1;
+            }else if(this.leftBranch != null && this.rightBranch.height < this.leftBranch.height){
+                this.height = this.rightBranch.height + 1;
             }
         }else{
             this.height = 1;
         }
-        for(Node p = this.root; p != null; p = p.root){
-            p.updateHeight();
+        for(Node node = this.root; node != null; node = node.root){
+            node.updateHeight();
         }
     }
-    public void equalize(Node p){
-        this.value = p.value;
-        this.lista = p.lista;
+    public void equalize(Node node){
+        this.value = node.value;
+        this.lista = node.lista;
     }
 
-    private static int balance(Node p){
-        if(p != null){
-            return height(p.next_L) - height(p.next_H);
+    private static int balance(Node node){
+        if(node != null){
+            return height(node.leftBranch) - height(node.rightBranch);
         }
         return 0;
     }
 
-    private static int height(Node p){
-        if(p != null){return p.height;}
+    private static int height(Node node){
+        if(node != null){return node.height;}
         return 0;
     }
 
-    static Node rotate(Node p){
-        while(p != null){
-            int balance = balance(p);
+    static Node rotate(Node node){
+        while(node != null){
+            int balance = balance(node);
             if(balance > 1){
-                if(balance(p.next_L) < 0){
-                    p.next_L = leftRotate(p.next_L);
+                if(balance(node.leftBranch) < 0){
+                    node.leftBranch = leftRotate(node.leftBranch);
                 }
-                p = rightRotate(p);
-                if(p.root != null){p.root.next_H = p;}
+                node = rightRotate(node);
+                if(node.root != null){node.root.rightBranch = node;}
             }
             else if(balance < -1){
-                if(balance(p.next_H) > 0){
-                    p.next_H = rightRotate(p.next_H);
+                if(balance(node.rightBranch) > 0){
+                    node.rightBranch = rightRotate(node.rightBranch);
                 }
-                p = leftRotate(p);
-                if(p.root != null){p.root.next_L = p;}
+                node = leftRotate(node);
+                if(node.root != null){node.root.leftBranch = node;}
             }
-            if(p.root == null){return p;}
-            p = p.root;
+            if(node.root == null){return node;}
+            node = node.root;
         }
         return null;
     }
 
-    static Node leftRotate(Node p){
-        Node aux = p.next_H;
-        Node aux2 = aux.next_L;
-        aux.next_L = p;
-        aux.root = p.root;
-        p.root = aux;
-        p.next_H = aux2;
-        p.updateHeight();
-        aux.updateHeight();
-        return aux;
+    static Node leftRotate(Node node){
+        Node right = node.rightBranch;
+        Node center = right.leftBranch;
+        right.leftBranch = node;
+        right.root = node.root;
+        node.root = right;
+        node.rightBranch = center;
+        node.updateHeight();
+        right.updateHeight();
+        return right;
     }
-    static Node rightRotate(Node p){
-        Node aux = p.next_L;
-        Node aux2 = aux.next_H;
-        aux.next_H = p;
-        aux.root = p.root;
-        p.root = aux;
-        p.next_L = aux2;
-        p.updateHeight();
-        aux.updateHeight();
-        return aux;
+    static Node rightRotate(Node node){
+        Node left = node.leftBranch;
+        Node center = left.rightBranch;
+        left.rightBranch = node;
+        left.root = node.root;
+        node.root = left;
+        node.leftBranch = center;
+        node.updateHeight();
+        left.updateHeight();
+        return left;
     }
 
     public Lista getLista(){return this.lista;}

@@ -22,19 +22,19 @@ public class Lista {
     }
 
     public void printAll(){
-        No p = this.primeiro;
-        while(p != null){
-            System.out.println("Title: " + p.title + " Frequencia:" + p.freq);
+        No no = this.primeiro;
+        while(no != null){
+            System.out.println("Title: " + no.title + " Frequencia:" + no.freq);
         }
     }
 
     public No get(int index){
         try{
-            No p = this.primeiro;
+            No no = this.primeiro;
             int cont = 0;
-            while(p != null){
-                if(cont == index){return p;}
-                p = p.proximo;
+            while(no != null){
+                if(cont == index){return no;}
+                no = no.proximo;
                 cont++;
             }
         }catch(Exception e){
@@ -44,11 +44,11 @@ public class Lista {
     }
 
     public String toString(){
-        No p = this.primeiro;
+        No no = this.primeiro;
         String s = "";
-        while(p != null){
-            s += p.getTitle() + ": " + p.getFreq() + ". ";
-            p = p.proximo;
+        while(no != null){
+            s += no.getTitle() + ": " + no.getFreq() + ". ";
+            no = no.proximo;
         }
         return s;
     }
