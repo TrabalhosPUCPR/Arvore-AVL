@@ -43,6 +43,16 @@ public class Lista {
         return null;
     }
 
+    public int getTotalFreq(){
+        No node = this.primeiro;
+        int total = 0;
+        while(node != null){
+            total += node.getFreq();
+            node = node.proximo;
+        }
+        return total;
+    }
+
     public String toString(){
         No no = this.primeiro;
         String s = "";
@@ -50,6 +60,7 @@ public class Lista {
             s += no.getTitle() + ": " + no.getFreq() + ". ";
             no = no.proximo;
         }
+        s += " Total de frequencia: " + this.getTotalFreq();
         return s;
     }
     public No getPrimeiro(){return this.primeiro;}

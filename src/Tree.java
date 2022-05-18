@@ -2,51 +2,55 @@ import Lista.No;
 
 public class Tree {
     private Node root;
+    private TxtReader txtreader = new TxtReader("");
 
     public Tree(){
         this.root = null;
     }
 
     public void insert(String value, String fileTitle){
-        if(this.root == null){
-            this.root = new Node(value, fileTitle);
-        }else{
-            Node node = this.root;
-            Node inserted = new Node(value, fileTitle);
-            while(node != null){
-                if(node.value.compareTo(value) < 0){
-                    if(node.leftBranch == null){
-                        inserted.root = node;
-                        node.leftBranch = inserted; 
-                        break;
-                    }
-                    node = node.leftBranch;
-                }else if(node.value.compareTo(value) > 0){
-                    if(node.rightBranch == null){
-                        inserted.root = node;
-                        node.rightBranch = inserted; 
-                        break;
-                    }
-                    node = node.rightBranch;
-                }else{
-                    No no = node.getLista().getPrimeiro();
-                    boolean contain = false;
-                    while(no != null){
-                        if(no.getTitle().equals(fileTitle)){
-                            no.incrementFreq();
-                            contain = true;
+        this.txtreader.path = fileTitle;
+        for(int freq = txtreader.pegarFreq(value); freq > 0; freq--){
+            if(this.root == null){
+                this.root = new Node(value, fileTitle);
+            }else{
+                Node node = this.root;
+                Node inserted = new Node(value, fileTitle);
+                while(node != null){
+                    if(node.value.compareTo(value) < 0){
+                        if(node.leftBranch == null){
+                            inserted.root = node;
+                            node.leftBranch = inserted; 
                             break;
                         }
-                        no = no.getProx();
+                        node = node.leftBranch;
+                    }else if(node.value.compareTo(value) > 0){
+                        if(node.rightBranch == null){
+                            inserted.root = node;
+                            node.rightBranch = inserted; 
+                            break;
+                        }
+                        node = node.rightBranch;
+                    }else{
+                        No no = node.getLista().getPrimeiro();
+                        boolean contain = false;
+                        while(no != null){
+                            if(no.getTitle().equals(fileTitle)){
+                                no.incrementFreq();
+                                contain = true;
+                                break;
+                            }
+                            no = no.getProx();
+                        }
+                        if(!contain){
+                            node.getLista().add(1, fileTitle);
+                        }
+                        break;
                     }
-                    if(!contain){
-                        node.getLista().add(1, fileTitle);
-                    }
-                    break;
                 }
+                node.updateHeight();
+                this.root = Node.rotate(node);
             }
-            node.updateHeight();
-            this.root = Node.rotate(node);
         }
     }
 

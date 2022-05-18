@@ -3,13 +3,14 @@ public class App {
         Tree tree = new Tree();
 
         TxtReader txt = new TxtReader("src/teste.txt");
+        TxtReader txt2 = new TxtReader("src/teste2.txt");
         String[] palavras = {"computador", "pao", "monitor", "batata"};
 
         for(int i = 0; i < palavras.length; i++){
-            for(int freq = txt.pegarFreq(palavras[i]); freq > 0; freq--){
-                tree.insert(palavras[i], txt.path);
-            }
+            tree.insert(palavras[i], txt.path);
         }
+
+        tree.insert("computador", txt2.path);
 
         tree.print_preorder();
         tree.print_inorder();
